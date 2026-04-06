@@ -1,2 +1,776 @@
-# -
-Русская соц сеть 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Эхо — новая социальная сеть</title>
+    <!-- Font Awesome 6 (free icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fe 0%, #eef2fa 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        /* основные контейнеры */
+        .container {
+            max-width: 780px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* auth panel */
+        .auth-panel, .app-panel {
+            padding: 2rem 1.8rem;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 1.8rem;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b3bdf, #9f4bff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.25rem;
+            display: inline-block;
+        }
+
+        .tagline {
+            color: #5b677b;
+            margin-bottom: 1.8rem;
+            font-size: 0.9rem;
+            border-left: 3px solid #7c3aed;
+            padding-left: 0.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            color: #1f2a44;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #dfe6f0;
+            border-radius: 1.2rem;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            background: #ffffff;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+
+        button {
+            background: #1f2a44;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.3rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button i {
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(95deg, #4f46e5, #7c3aed);
+            box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.02);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #cbd5e1;
+            color: #2d3a5e;
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        .switch-link {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.85rem;
+            color: #4b5563;
+        }
+
+        .switch-link span {
+            color: #4f46e5;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* header приложения */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.8rem;
+            background: white;
+            border-bottom: 1px solid #e9eef3;
+        }
+
+        .app-logo {
+            font-weight: 800;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #3b3bdf, #9f4bff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            background: #f0f3fa;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: none;
+            color: #5f6c86;
+            padding: 0.4rem 0.9rem;
+            box-shadow: none;
+        }
+
+        .logout-btn:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* создание поста */
+        .create-post {
+            background: white;
+            margin: 1.5rem 1.8rem;
+            padding: 1.2rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+
+        .create-post textarea {
+            border-radius: 1.2rem;
+            resize: vertical;
+            margin-bottom: 0.8rem;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* лента */
+        .feed {
+            padding: 0 1.8rem 2rem 1.8rem;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1.2rem 1.4rem;
+            transition: 0.1s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid #edf2f7;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .post-author {
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .post-author i {
+            color: #7c3aed;
+        }
+
+        .post-date {
+            font-size: 0.7rem;
+            color: #8a99b4;
+        }
+
+        .post-content {
+            font-size: 0.95rem;
+            line-height: 1.45;
+            color: #1f2a3e;
+            margin: 0.75rem 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .post-stats {
+            display: flex;
+            gap: 1.2rem;
+            margin: 0.8rem 0 0.6rem;
+            font-size: 0.8rem;
+            color: #5c6b8a;
+        }
+
+        .post-stats button {
+            background: none;
+            padding: 0.2rem 0.5rem;
+            color: #4b556b;
+            font-size: 0.8rem;
+            gap: 4px;
+        }
+
+        .post-stats button.liked {
+            color: #e11d48;
+        }
+
+        .delete-post {
+            color: #9ca3af;
+            background: none;
+            padding: 0.2rem 0.6rem;
+        }
+
+        .delete-post:hover {
+            color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .comments-section {
+            margin-top: 0.8rem;
+            border-top: 1px solid #eef2f8;
+            padding-top: 0.8rem;
+        }
+
+        .comment-item {
+            font-size: 0.8rem;
+            background: #fafcff;
+            padding: 0.5rem 0.7rem;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-name {
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+        .comment-text {
+            color: #2c3e4e;
+            margin-left: 0.3rem;
+        }
+
+        .add-comment {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.6rem;
+        }
+
+        .add-comment input {
+            flex: 1;
+            padding: 0.5rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+        }
+
+        .add-comment button {
+            padding: 0.4rem 1rem;
+            background: #eef2ff;
+            color: #4338ca;
+        }
+
+        .empty-feed {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+            background: white;
+            border-radius: 2rem;
+        }
+
+        hr {
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 550px) {
+            body { padding: 0.8rem; }
+            .container { border-radius: 1.5rem; }
+            .app-header { flex-direction: column; gap: 8px; align-items: stretch; text-align: center; }
+            .user-info { justify-content: space-between; }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="rootContainer">
+    <!-- Аутентификация (по умолчанию видна) -->
+    <div id="authContainer" class="auth-panel">
+        <div class="auth-card">
+            <div class="logo">🌊 Эхо</div>
+            <div class="tagline">новая соцсеть — твои мысли, твои люди</div>
+            <div id="loginForm">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Имя пользователя</label>
+                    <input type="text" id="loginUsername" placeholder="например: alice" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Пароль</label>
+                    <input type="password" id="loginPassword" placeholder="••••••">
+                </div>
+                <button id="doLoginBtn" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Войти</button>
+                <div class="switch-link">Нет аккаунта? <span id="showRegisterBtn">Зарегистрироваться</span></div>
+            </div>
+            <div id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label><i class="fas fa-user-plus"></i> Имя пользователя</label>
+                    <input type="text" id="regUsername" placeholder="уникальный никнейм">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Пароль</label>
+                    <input type="password" id="regPassword" placeholder="минимум 3 символа">
+                </div>
+                <button id="doRegisterBtn" class="btn-primary"><i class="fas fa-user-check"></i> Создать аккаунт</button>
+                <div class="switch-link">Уже есть аккаунт? <span id="showLoginBtn">Войти</span></div>
+            </div>
+            <div id="authMessage" style="margin-top: 1rem; font-size: 0.8rem; text-align: center; color: #b91c1c;"></div>
+        </div>
+    </div>
+
+    <!-- Главное приложение (соцсеть) -->
+    <div id="appContainer" style="display: none;">
+        <div class="app-header">
+            <div class="app-logo"><i class="fas fa-waveform"></i> Эхо</div>
+            <div class="user-info">
+                <div class="user-name" id="currentUserNameDisplay">—</div>
+                <button id="logoutButton" class="logout-btn"><i class="fas fa-arrow-right-from-bracket"></i> Выйти</button>
+            </div>
+        </div>
+
+        <div class="create-post">
+            <textarea id="newPostContent" rows="2" placeholder="Что у вас нового? Поделитесь мыслями... ✨"></textarea>
+            <div class="post-actions">
+                <button id="publishPostBtn" class="btn-primary"><i class="fas fa-paper-plane"></i> Опубликовать</button>
+            </div>
+        </div>
+
+        <div class="feed" id="feedContainer">
+            <!-- посты будут загружаться динамически -->
+            <div class="empty-feed">Загрузка ленты...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- Хранилище данных (localStorage) ----------
+    // Структура: 
+    // users: [{ id, username, password }]
+    // posts: [{ id, authorId, authorName, content, timestamp, likes: [userId], comments: [{ id, userId, userName, text, timestamp }] }]
+    let USERS_KEY = "echo_users";
+    let POSTS_KEY = "echo_posts";
+    let SESSION_KEY = "echo_session"; // id текущего пользователя
+
+    // Инициализация демо-данных, если ничего нет
+    function initStorage() {
+        if (!localStorage.getItem(USERS_KEY)) {
+            const defaultUsers = [
+                { id: "u1", username: "alex", password: "123" },
+                { id: "u2", username: "maria", password: "123" },
+                { id: "u3", username: "kirill", password: "123" }
+            ];
+            localStorage.setItem(USERS_KEY, JSON.stringify(defaultUsers));
+        }
+        if (!localStorage.getItem(POSTS_KEY)) {
+            const defaultPosts = [
+                { id: "p1", authorId: "u1", authorName: "alex", content: "Добро пожаловать в Эхо! 🌟 Здесь каждый голос важен.", timestamp: Date.now() - 3600000, likes: ["u2"], comments: [{ id: "c1", userId: "u2", userName: "maria", text: "Классная идея! 🔥", timestamp: Date.now() - 1800000 }] },
+                { id: "p2", authorId: "u2", authorName: "maria", content: "Сегодня отличная погода, вдохновение переполняет ☀️", timestamp: Date.now() - 7200000, likes: ["u1", "u3"], comments: [] },
+                { id: "p3", authorId: "u3", authorName: "kirill", content: "Новая соцсеть — это свежий взгляд на общение. Что вы думаете о минимализме?", timestamp: Date.now() - 86400000, likes: [], comments: [] }
+            ];
+            localStorage.setItem(POSTS_KEY, JSON.stringify(defaultPosts));
+        }
+    }
+    initStorage();
+
+    // Вспомогательные функции
+    function getUsers() {
+        return JSON.parse(localStorage.getItem(USERS_KEY));
+    }
+    function saveUsers(users) {
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    }
+    function getPosts() {
+        return JSON.parse(localStorage.getItem(POSTS_KEY));
+    }
+    function savePosts(posts) {
+        localStorage.setItem(POSTS_KEY, JSON.stringify(posts));
+    }
+
+    // Текущая сессия
+    let currentUser = null; // объект {id, username}
+
+    function getSession() {
+        const sessionId = localStorage.getItem(SESSION_KEY);
+        if (!sessionId) return null;
+        const users = getUsers();
+        const user = users.find(u => u.id === sessionId);
+        if (user) return { id: user.id, username: user.username };
+        return null;
+    }
+
+    function setSession(userId) {
+        if (userId) localStorage.setItem(SESSION_KEY, userId);
+        else localStorage.removeItem(SESSION_KEY);
+    }
+
+    // --- Рендер ленты ---
+    function renderFeed() {
+        if (!currentUser) return;
+        const feedDiv = document.getElementById("feedContainer");
+        let posts = getPosts();
+        // сортировка по дате (новые сверху)
+        posts.sort((a,b) => b.timestamp - a.timestamp);
+        if (!posts.length) {
+            feedDiv.innerHTML = `<div class="empty-feed"><i class="fas fa-newspaper"></i> Пока нет постов. Напишите первый!</div>`;
+            return;
+        }
+        feedDiv.innerHTML = "";
+        posts.forEach(post => {
+            const isLiked = post.likes.includes(currentUser.id);
+            const isAuthor = post.authorId === currentUser.id;
+            const postDate = new Date(post.timestamp).toLocaleString("ru-RU", { hour: '2-digit', minute:'2-digit', day:'numeric', month:'short' });
+            
+            const postCard = document.createElement("div");
+            postCard.className = "post-card";
+            postCard.dataset.postId = post.id;
+            
+            // шапка
+            postCard.innerHTML = `
+                <div class="post-header">
+                    <div class="post-author"><i class="fas fa-circle-user"></i> ${escapeHtml(post.authorName)}</div>
+                    <div class="post-date">${postDate}</div>
+                </div>
+                <div class="post-content">${escapeHtml(post.content)}</div>
+                <div class="post-stats">
+                    <button class="like-btn ${isLiked ? 'liked' : ''}" data-id="${post.id}"><i class="fas fa-heart"></i> <span class="likes-count">${post.likes.length}</span></button>
+                    <button class="comment-toggle-btn" data-id="${post.id}"><i class="fas fa-comment"></i> ${post.comments.length}</button>
+                    ${isAuthor ? `<button class="delete-post" data-id="${post.id}"><i class="fas fa-trash-can"></i> Удалить</button>` : ''}
+                </div>
+                <div class="comments-section" id="comments-${post.id}">
+                    <div class="comments-list" id="comments-list-${post.id}"></div>
+                    <div class="add-comment">
+                        <input type="text" placeholder="Написать комментарий..." id="comment-input-${post.id}">
+                        <button class="add-comment-btn" data-id="${post.id}"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            `;
+            feedDiv.appendChild(postCard);
+            
+            // отрисовать комментарии
+            const commentsListDiv = postCard.querySelector(`.comments-list`);
+            if (post.comments.length === 0) {
+                commentsListDiv.innerHTML = `<div style="font-size:0.7rem; color:#9aa9c1; padding:0.3rem 0;">Нет комментариев. Будьте первым!</div>`;
+            } else {
+                commentsListDiv.innerHTML = "";
+                post.comments.forEach(comment => {
+                    const commentDiv = document.createElement("div");
+                    commentDiv.className = "comment-item";
+                    commentDiv.innerHTML = `<span class="comment-name">${escapeHtml(comment.userName)}</span><span class="comment-text">${escapeHtml(comment.text)}</span>`;
+                    commentsListDiv.appendChild(commentDiv);
+                });
+            }
+            
+            // обработчики кнопок
+            const likeBtn = postCard.querySelector(`.like-btn`);
+            likeBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                toggleLike(post.id);
+            });
+            
+            const deleteBtn = postCard.querySelector(`.delete-post`);
+            if (deleteBtn) {
+                deleteBtn.addEventListener("click", () => deletePost(post.id));
+            }
+            
+            const addCommentBtn = postCard.querySelector(`.add-comment-btn`);
+            const commentInput = postCard.querySelector(`.add-comment input`);
+            addCommentBtn.addEventListener("click", () => {
+                const text = commentInput.value.trim();
+                if (text) {
+                    addCommentToPost(post.id, text);
+                    commentInput.value = "";
+                }
+            });
+        });
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+    
+    // Лайк / анлайк
+    function toggleLike(postId) {
+        let posts = getPosts();
+        const postIndex = posts.findIndex(p => p.id === postId);
+        if (postIndex === -1) return;
+        const post = posts[postIndex];
+        const userId = currentUser.id;
+        if (post.likes.includes(userId)) {
+            post.likes = post.likes.filter(id => id !== userId);
+        } else {
+            post.likes.push(userId);
+        }
+        savePosts(posts);
+        renderFeed(); // обновляем ленту
+    }
+    
+    // Добавить комментарий
+    function addCommentToPost(postId, text) {
+        let posts = getPosts();
+        const postIndex = posts.findIndex(p => p.id === postId);
+        if (postIndex === -1) return;
+        const comment = {
+            id: Date.now() + Math.random().toString(36),
+            userId: currentUser.id,
+            userName: currentUser.username,
+            text: text.slice(0, 240),
+            timestamp: Date.now()
+        };
+        posts[postIndex].comments.push(comment);
+        savePosts(posts);
+        renderFeed();
+    }
+    
+    // Создать пост
+    function createPost(content) {
+        if (!content.trim()) return alert("Нельзя отправить пустой пост");
+        const posts = getPosts();
+        const newPost = {
+            id: "p" + Date.now() + Math.random().toString(36),
+            authorId: currentUser.id,
+            authorName: currentUser.username,
+            content: content.slice(0, 500),
+            timestamp: Date.now(),
+            likes: [],
+            comments: []
+        };
+        posts.push(newPost);
+        savePosts(posts);
+        renderFeed();
+    }
+    
+    // Удалить пост
+    function deletePost(postId) {
+        if (!confirm("Удалить пост навсегда?")) return;
+        let posts = getPosts();
+        const post = posts.find(p => p.id === postId);
+        if (post && post.authorId !== currentUser.id) {
+            alert("Нельзя удалить чужой пост");
+            return;
+        }
+        posts = posts.filter(p => p.id !== postId);
+        savePosts(posts);
+        renderFeed();
+    }
+    
+    // Регистрация
+    function register(username, password) {
+        if (username.length < 2) return "Имя слишком короткое (мин 2 символа)";
+        if (password.length < 3) return "Пароль минимум 3 символа";
+        const users = getUsers();
+        if (users.find(u => u.username === username)) return "Пользователь с таким именем уже существует";
+        const newId = "u" + Date.now() + Math.random().toString(36);
+        const newUser = { id: newId, username: username, password: password };
+        users.push(newUser);
+        saveUsers(users);
+        // автоматический вход
+        setSession(newId);
+        currentUser = { id: newId, username: username };
+        return null;
+    }
+    
+    // Логин
+    function login(username, password) {
+        const users = getUsers();
+        const user = users.find(u => u.username === username && u.password === password);
+        if (!user) return "Неверное имя или пароль";
+        setSession(user.id);
+        currentUser = { id: user.id, username: user.username };
+        return null;
+    }
+    
+    // Выход
+    function logout() {
+        setSession(null);
+        currentUser = null;
+        showAuthUI();
+    }
+    
+    // Переключение UI
+    function showAppUI() {
+        document.getElementById("authContainer").style.display = "none";
+        document.getElementById("appContainer").style.display = "block";
+        document.getElementById("currentUserNameDisplay").innerHTML = `<i class="fas fa-user-astronaut"></i> ${escapeHtml(currentUser.username)}`;
+        renderFeed();
+    }
+    
+    function showAuthUI() {
+        document.getElementById("authContainer").style.display = "block";
+        document.getElementById("appContainer").style.display = "none";
+        // очистка полей
+        document.getElementById("loginUsername").value = "";
+        document.getElementById("loginPassword").value = "";
+        document.getElementById("regUsername").value = "";
+        document.getElementById("regPassword").value = "";
+        document.getElementById("authMessage").innerText = "";
+        showLoginForm();
+    }
+    
+    function showLoginForm() {
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("authMessage").innerText = "";
+    }
+    
+    function showRegisterForm() {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("registerForm").style.display = "block";
+        document.getElementById("authMessage").innerText = "";
+    }
+    
+    // обработчики аутентификации
+    function bindAuthEvents() {
+        document.getElementById("doLoginBtn").onclick = () => {
+            const username = document.getElementById("loginUsername").value.trim();
+            const password = document.getElementById("loginPassword").value;
+            const err = login(username, password);
+            if (err) {
+                document.getElementById("authMessage").innerText = err;
+            } else {
+                showAppUI();
+            }
+        };
+        document.getElementById("doRegisterBtn").onclick = () => {
+            const username = document.getElementById("regUsername").value.trim();
+            const password = document.getElementById("regPassword").value;
+            const err = register(username, password);
+            if (err) {
+                document.getElementById("authMessage").innerText = err;
+            } else {
+                showAppUI();
+            }
+        };
+        document.getElementById("showRegisterBtn").onclick = () => showRegisterForm();
+        document.getElementById("showLoginBtn").onclick = () => showLoginForm();
+        document.getElementById("logoutButton")?.addEventListener("click", () => logout());
+        document.getElementById("publishPostBtn")?.addEventListener("click", () => {
+            const content = document.getElementById("newPostContent").value.trim();
+            if (content) {
+                createPost(content);
+                document.getElementById("newPostContent").value = "";
+            } else {
+                alert("Напишите что-нибудь :)");
+            }
+        });
+    }
+    
+    // Проверка сессии при загрузке
+    function initSession() {
+        const sessionUser = getSession();
+        if (sessionUser) {
+            currentUser = sessionUser;
+            showAppUI();
+        } else {
+            currentUser = null;
+            showAuthUI();
+        }
+        bindAuthEvents(); // повторно привязываем на случай динамических элементов (но кнопка логаут уже есть)
+        // дополнительно перехватываем клики (для кнопки логаута после перерисовки нужно переопределить)
+        const logoutBtnDynamic = document.getElementById("logoutButton");
+        if (logoutBtnDynamic) {
+            // удаляем старые обработчики через clone? лучше просто заново
+            const newLogout = logoutBtnDynamic.cloneNode(true);
+            logoutBtnDynamic.parentNode.replaceChild(newLogout, logoutBtnDynamic);
+            newLogout.addEventListener("click", () => logout());
+        }
+        const publishBtn = document.getElementById("publishPostBtn");
+        if (publishBtn) {
+            const newPub = publishBtn.cloneNode(true);
+            publishBtn.parentNode.replaceChild(newPub, publishBtn);
+            newPub.addEventListener("click", () => {
+                const content = document.getElementById("newPostContent").value.trim();
+                if (content) {
+                    createPost(content);
+                    document.getElementById("newPostContent").value = "";
+                } else alert("Напишите что-нибудь :)");
+            });
+        }
+    }
+    
+    // Запуск
+    initSession();
+</script>
+</body>
+</html>
